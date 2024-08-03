@@ -1,0 +1,8 @@
+{
+    "name": "Lines of Code (CLOC)",
+    "description": "Count lines of code of repo",
+    "iconName": "octicon terminal",
+    "categories": [
+        "utilities"
+    ]
+}
