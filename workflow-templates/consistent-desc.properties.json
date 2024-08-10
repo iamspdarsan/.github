@@ -1,0 +1,8 @@
+{
+    "name": "Consistent End-User Meta",
+    "description": "Update end-user content consistently across NPM and Github",
+    "iconName": "octicon copy",
+    "categories": [
+        "utilities"
+    ]
+}
