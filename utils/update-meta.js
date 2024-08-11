@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var rest_1 = require("@octokit/rest");
 var fs_1 = require("fs");
 var marked_1 = require("marked");
 var node_html_parser_1 = require("node-html-parser");
@@ -87,17 +86,29 @@ function updateNpmJson(meta) {
     }
 }
 function updateGHmeta(meta) {
-    var _a, _b;
-    var owner = (_a = process.env.REPO_OWNER) !== null && _a !== void 0 ? _a : "";
-    var repoName = (_b = process.env.REPO_NAME) !== null && _b !== void 0 ? _b : "";
-    var octakit = new rest_1.Octokit({ auth: process.env.GITHUB_TOKEN });
-    var _c = octakit.repos, replaceAllTopics = _c.replaceAllTopics, update = _c.update;
-    replaceAllTopics({ owner: owner, repo: repoName, names: meta.keywords });
-    update({
-        owner: owner,
-        repo: repoName,
-        description: meta.description,
-        homepage: meta.homepage,
+    return __awaiter(this, void 0, void 0, function () {
+        var owner, repoName, Octokit, octakit, _a, replaceAllTopics, update;
+        var _b, _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    owner = (_b = process.env.REPO_OWNER) !== null && _b !== void 0 ? _b : "";
+                    repoName = (_c = process.env.REPO_NAME) !== null && _c !== void 0 ? _c : "";
+                    return [4 /*yield*/, Promise.resolve().then(function () { return require("@octokit/rest"); })];
+                case 1:
+                    Octokit = (_d.sent()).Octokit;
+                    octakit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+                    _a = octakit.repos, replaceAllTopics = _a.replaceAllTopics, update = _a.update;
+                    replaceAllTopics({ owner: owner, repo: repoName, names: meta.keywords });
+                    update({
+                        owner: owner,
+                        repo: repoName,
+                        description: meta.description,
+                        homepage: meta.homepage,
+                    });
+                    return [2 /*return*/];
+            }
+        });
     });
 }
 function main() {

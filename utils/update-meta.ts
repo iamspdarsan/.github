@@ -1,4 +1,3 @@
-import { Octokit } from "@octokit/rest";
 import { readFileSync, writeFileSync } from "fs";
 import { parse as mdParse } from "marked";
 import { parse as htmlParse } from "node-html-parser";
@@ -63,9 +62,11 @@ function updateNpmJson(meta: ReadmeMeta): void {
   }
 }
 
-function updateGHmeta(meta: ReadmeMeta): void {
+async function updateGHmeta(meta: ReadmeMeta): Promise<void> {
   const owner: string = process.env.REPO_OWNER ?? "";
   const repoName: string = process.env.REPO_NAME ?? "";
+
+  const { Octokit } = await import("@octokit/rest");
 
   const octakit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
