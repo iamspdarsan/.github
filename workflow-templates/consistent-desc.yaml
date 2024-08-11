@@ -25,18 +25,14 @@ jobs:
 
       - name: Download Hero program
         run: |
-          FILE=".github/update-meta.js"
-          if [ ! -f "$FILE" ]; then
-            echo "Downloading program.."
-            curl -o .github/update-meta.js https://raw.githubusercontent.com/darsan-in/.github/main/utils/update-meta.js  
-          fi
+          curl -o update-meta.js https://raw.githubusercontent.com/darsan-in/.github/main/utils/update-meta.js
 
       - name: Update meta
         env:
           GITHUB_TOKEN: ${{ secrets.META_UPDATE_KEY }}
           REPO_META: ${{ github.repository }}
         run: |
-          node ./.github/update-meta.js
+          node update-meta.js
 
       - name: Commit and push changes
         env:
@@ -44,6 +40,6 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add package.json .github/update-meta.js
+          git add package.json
           git commit -m 'End-User Meta updated'
           git push
