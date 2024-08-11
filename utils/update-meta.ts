@@ -1,4 +1,5 @@
-import { readFileSync } from "fs";
+import { Octokit } from "@octokit/rest";
+import { readFileSync, writeFileSync } from "fs";
 import { parse as mdParse } from "marked";
 import { parse as htmlParse } from "node-html-parser";
 
@@ -30,7 +31,7 @@ async function loadMeta(): Promise<ReadmeMeta> {
     parsedHTML
       .querySelector("#keywords")
       ?.childNodes.filter((child) => child.rawTagName === "li")
-      .map((child) => child.innerText ?? "") ?? [];
+      .map((child) => child.innerText?.toLowerCase() ?? "") ?? [];
 
   const homepage: string =
     parsedHTML.querySelector("#url")?.getAttribute("href") ?? "";
@@ -41,3 +42,51 @@ async function loadMeta(): Promise<ReadmeMeta> {
     homepage: homepage,
   };
 }
+
+function updateNpmJson(meta: ReadmeMeta): void {
+  const jsonPath: string = "package.json";
+
+  const jsonData: string = JSON.parse(
+    readFileSync(jsonPath, { encoding: "utf8" })
+  );
+
+  /* Updating content */
+  jsonData["homepage"] = meta.homepage;
+  jsonData["description"] = meta.description;
+  jsonData["keywords"] = meta.keywords;
+
+  writeFileSync(jsonPath, jsonData, { encoding: "utf8" });
+}
+
+function updateGHmeta(meta: ReadmeMeta): void {
+  const owner: string = process.env.REPO_OWNER ?? "";
+  const repoName: string = process.env.REPO_NAME ?? "";
+
+  const octakit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+
+  const {
+    repos: { replaceAllTopics, update },
+  } = octakit;
+
+  replaceAllTopics({ owner: owner, repo: repoName, names: meta.keywords });
+
+  update({
+    owner: owner,
+    repo: repoName,
+    description: meta.description,
+    homepage: meta.homepage,
+  });
+}
+
+async function main() {
+  try {
+    const meta: ReadmeMeta = await loadMeta();
+
+    updateNpmJson(meta);
+    updateGHmeta(meta);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+main();

@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var rest_1 = require("@octokit/rest");
 var fs_1 = require("fs");
 var marked_1 = require("marked");
 var node_html_parser_1 = require("node-html-parser");
@@ -59,7 +60,7 @@ function loadMeta() {
                     parsedHTML = (0, node_html_parser_1.parse)(parsedMD);
                     description = ((_b = (_a = parsedHTML.querySelector("#intro")) === null || _a === void 0 ? void 0 : _a.innerText) !== null && _b !== void 0 ? _b : "").replace(/\n/g, " ");
                     keywords = (_d = (_c = parsedHTML
-                        .querySelector("#keywords")) === null || _c === void 0 ? void 0 : _c.childNodes.filter(function (child) { return child.rawTagName === "li"; }).map(function (child) { var _a; return (_a = child.innerText) !== null && _a !== void 0 ? _a : ""; })) !== null && _d !== void 0 ? _d : [];
+                        .querySelector("#keywords")) === null || _c === void 0 ? void 0 : _c.childNodes.filter(function (child) { return child.rawTagName === "li"; }).map(function (child) { var _a, _b; return (_b = (_a = child.innerText) === null || _a === void 0 ? void 0 : _a.toLowerCase()) !== null && _b !== void 0 ? _b : ""; })) !== null && _d !== void 0 ? _d : [];
                     homepage = (_f = (_e = parsedHTML.querySelector("#url")) === null || _e === void 0 ? void 0 : _e.getAttribute("href")) !== null && _f !== void 0 ? _f : "";
                     return [2 /*return*/, {
                             description: description,
@@ -70,3 +71,49 @@ function loadMeta() {
         });
     });
 }
+function updateNpmJson(meta) {
+    var jsonPath = "package.json";
+    var jsonData = JSON.parse((0, fs_1.readFileSync)(jsonPath, { encoding: "utf8" }));
+    /* Updating content */
+    jsonData["homepage"] = meta.homepage;
+    jsonData["description"] = meta.description;
+    jsonData["keywords"] = meta.keywords;
+    (0, fs_1.writeFileSync)(jsonPath, jsonData, { encoding: "utf8" });
+}
+function updateGHmeta(meta) {
+    var _a, _b;
+    var owner = (_a = process.env.REPO_OWNER) !== null && _a !== void 0 ? _a : "";
+    var repoName = (_b = process.env.REPO_NAME) !== null && _b !== void 0 ? _b : "";
+    var octakit = new rest_1.Octokit({ auth: process.env.GITHUB_TOKEN });
+    var _c = octakit.repos, replaceAllTopics = _c.replaceAllTopics, update = _c.update;
+    replaceAllTopics({ owner: owner, repo: repoName, names: meta.keywords });
+    update({
+        owner: owner,
+        repo: repoName,
+        description: meta.description,
+        homepage: meta.homepage,
+    });
+}
+function main() {
+    return __awaiter(this, void 0, void 0, function () {
+        var meta, err_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, loadMeta()];
+                case 1:
+                    meta = _a.sent();
+                    updateNpmJson(meta);
+                    updateGHmeta(meta);
+                    return [3 /*break*/, 3];
+                case 2:
+                    err_1 = _a.sent();
+                    console.error(err_1);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+main();

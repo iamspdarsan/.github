@@ -34,6 +34,8 @@ jobs:
       - name: Update meta
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: $(echo "${{ github.repository }}" | cut -d'/' -f1)
+          REPO_NAME: $(echo "${{ github.repository }}" | cut -d'/' -f2)
         run: |
           node ./.github/update-meta.js
 
