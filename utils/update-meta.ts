@@ -46,16 +46,21 @@ async function loadMeta(): Promise<ReadmeMeta> {
 function updateNpmJson(meta: ReadmeMeta): void {
   const jsonPath: string = "package.json";
 
-  const jsonData: string = JSON.parse(
-    readFileSync(jsonPath, { encoding: "utf8" })
-  );
+  try {
+    const jsonData: string = JSON.parse(
+      readFileSync(jsonPath, { encoding: "utf8" })
+    );
 
-  /* Updating content */
-  jsonData["homepage"] = meta.homepage;
-  jsonData["description"] = meta.description;
-  jsonData["keywords"] = meta.keywords;
+    /* Updating content */
+    jsonData["homepage"] = meta.homepage;
+    jsonData["description"] = meta.description;
+    jsonData["keywords"] = meta.keywords;
 
-  writeFileSync(jsonPath, jsonData, { encoding: "utf8" });
+    writeFileSync(jsonPath, jsonData, { encoding: "utf8" });
+  } catch (err) {
+    console.log("package.json not-found so skipped");
+    console.log(err);
+  }
 }
 
 function updateGHmeta(meta: ReadmeMeta): void {

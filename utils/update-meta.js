@@ -73,12 +73,18 @@ function loadMeta() {
 }
 function updateNpmJson(meta) {
     var jsonPath = "package.json";
-    var jsonData = JSON.parse((0, fs_1.readFileSync)(jsonPath, { encoding: "utf8" }));
-    /* Updating content */
-    jsonData["homepage"] = meta.homepage;
-    jsonData["description"] = meta.description;
-    jsonData["keywords"] = meta.keywords;
-    (0, fs_1.writeFileSync)(jsonPath, jsonData, { encoding: "utf8" });
+    try {
+        var jsonData = JSON.parse((0, fs_1.readFileSync)(jsonPath, { encoding: "utf8" }));
+        /* Updating content */
+        jsonData["homepage"] = meta.homepage;
+        jsonData["description"] = meta.description;
+        jsonData["keywords"] = meta.keywords;
+        (0, fs_1.writeFileSync)(jsonPath, jsonData, { encoding: "utf8" });
+    }
+    catch (err) {
+        console.log("package.json not-found so skipped");
+        console.log(err);
+    }
 }
 function updateGHmeta(meta) {
     var _a, _b;
