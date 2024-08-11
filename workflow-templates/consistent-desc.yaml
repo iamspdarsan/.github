@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - README.md
+  workflow_dispatch:
 
 jobs:
   meta-update:
@@ -17,11 +18,10 @@ jobs:
         uses: actions/setup-node@v4.0.2
         with:
           node-version: "20"
-          cache: npm
 
       - name: Install dependencies
         run: |
-          npm install --production node-html-parser marked
+          npm install --production node-html-parser marked @octokit/rest
 
       - name: Download Hero program
         run: |
