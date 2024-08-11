@@ -78,7 +78,9 @@ function updateNpmJson(meta) {
         jsonData["homepage"] = meta.homepage;
         jsonData["description"] = meta.description;
         jsonData["keywords"] = meta.keywords;
-        (0, fs_1.writeFileSync)(jsonPath, jsonData, { encoding: "utf8" });
+        (0, fs_1.writeFileSync)(jsonPath, JSON.stringify(jsonData, null, 2), {
+            encoding: "utf8",
+        });
     }
     catch (err) {
         console.log("package.json not-found so skipped");

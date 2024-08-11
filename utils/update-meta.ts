@@ -55,7 +55,9 @@ function updateNpmJson(meta: ReadmeMeta): void {
     jsonData["description"] = meta.description;
     jsonData["keywords"] = meta.keywords;
 
-    writeFileSync(jsonPath, jsonData, { encoding: "utf8" });
+    writeFileSync(jsonPath, JSON.stringify(jsonData, null, 2), {
+      encoding: "utf8",
+    });
   } catch (err) {
     console.log("package.json not-found so skipped");
     console.log(err);
