@@ -65,8 +65,10 @@ function updateNpmJson(meta: ReadmeMeta): void {
 }
 
 async function updateGHmeta(meta: ReadmeMeta): Promise<void> {
-  const owner: string = process.env.REPO_OWNER ?? "";
-  const repoName: string = process.env.REPO_NAME ?? "";
+  const ghContext: string[] = process.env.REPO_META.split("/") ?? ["", ""];
+
+  const owner: string = ghContext[0];
+  const repoName: string = ghContext[1];
 
   const { Octokit } = await import("@octokit/rest");
 

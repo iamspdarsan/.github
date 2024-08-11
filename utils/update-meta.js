@@ -43,8 +43,9 @@ function updateNpmJson(meta) {
     }
 }
 async function updateGHmeta(meta) {
-    const owner = process.env.REPO_OWNER ?? "";
-    const repoName = process.env.REPO_NAME ?? "";
+    const ghContext = process.env.REPO_META.split("/") ?? ["", ""];
+    const owner = ghContext[0];
+    const repoName = ghContext[1];
     const { Octokit } = await import("@octokit/rest");
     const octakit = new Octokit({ auth: process.env.GITHUB_TOKEN });
     const { repos: { replaceAllTopics, update }, } = octakit;
