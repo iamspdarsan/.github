@@ -22,8 +22,8 @@ jobs:
       - name: Install dependencies
         run: |
           mkdir -p temp && cd temp
-          npm init -y
-          npm install node-html-parser marked @octokit/rest -S
+          yarn init -y
+          yarn add node-html-parser marked @octokit/rest -S
 
       - name: Download Hero program
         run: |
