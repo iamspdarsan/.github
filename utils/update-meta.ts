@@ -43,7 +43,7 @@ async function loadMeta(): Promise<ReadmeMeta> {
 }
 
 function updateNpmJson(meta: ReadmeMeta): void {
-  const jsonPath: string = "package.json";
+  const jsonPath: string = "../package.json";
 
   try {
     const jsonData: string = JSON.parse(

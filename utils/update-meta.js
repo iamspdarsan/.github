@@ -26,7 +26,7 @@ async function loadMeta() {
     };
 }
 function updateNpmJson(meta) {
-    const jsonPath = "package.json";
+    const jsonPath = "../package.json";
     try {
         const jsonData = JSON.parse((0, fs_1.readFileSync)(jsonPath, { encoding: "utf8" }));
         /* Updating content */
