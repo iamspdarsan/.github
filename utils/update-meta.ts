@@ -78,7 +78,11 @@ async function updateGHmeta(meta: ReadmeMeta): Promise<void> {
     repos: { replaceAllTopics, update },
   } = octakit;
 
-  replaceAllTopics({ owner: owner, repo: repoName, names: meta.keywords });
+  replaceAllTopics({
+    owner: owner,
+    repo: repoName,
+    names: meta.keywords.map((kw: string) => kw.replace(" ", "-")),
+  });
 
   update({
     owner: owner,

@@ -49,7 +49,11 @@ async function updateGHmeta(meta) {
     const { Octokit } = await import("@octokit/rest");
     const octakit = new Octokit({ auth: process.env.GITHUB_TOKEN });
     const { repos: { replaceAllTopics, update }, } = octakit;
-    replaceAllTopics({ owner: owner, repo: repoName, names: meta.keywords });
+    replaceAllTopics({
+        owner: owner,
+        repo: repoName,
+        names: meta.keywords.map((kw) => kw.replace(" ", "-")),
+    });
     update({
         owner: owner,
         repo: repoName,
