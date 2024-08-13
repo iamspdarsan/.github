@@ -52,7 +52,7 @@ async function updateGHmeta(meta) {
     replaceAllTopics({
         owner: owner,
         repo: repoName,
-        names: meta.keywords.map((kw) => kw.replaceAll(" ", "-")),
+        names: meta.keywords.map((kw) => kw.replace(/[^a-zA-Z0-9]/g, "-")),
     });
     update({
         owner: owner,

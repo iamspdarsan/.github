@@ -81,7 +81,7 @@ async function updateGHmeta(meta: ReadmeMeta): Promise<void> {
   replaceAllTopics({
     owner: owner,
     repo: repoName,
-    names: meta.keywords.map((kw: string) => kw.replaceAll(" ", "-")),
+    names: meta.keywords.map((kw: string) => kw.replace(/[^a-zA-Z0-9]/g, "-")),
   });
 
   update({
