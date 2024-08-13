@@ -10,7 +10,7 @@ interface ReadmeMeta {
 
 /* Read readme file and extract meta description, keywords and homepage link */
 async function loadMeta(): Promise<ReadmeMeta> {
-  const readmeFilePath: string = "README.md";
+  const readmeFilePath: string = "../README.md";
 
   const readmeFileContent: string = readFileSync(readmeFilePath, {
     encoding: "utf8",
