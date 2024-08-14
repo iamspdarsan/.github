@@ -87,7 +87,7 @@ async function updateGHmeta(meta: ReadmeMeta): Promise<void> {
   update({
     owner: owner,
     repo: repoName,
-    description: meta.description,
+    description: meta.description.slice(0, 350),
     homepage: meta.homepage,
   });
 }
